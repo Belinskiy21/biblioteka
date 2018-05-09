@@ -2,13 +2,11 @@ class BooksController < ApplicationController
   before_action :set_book, only: [:show, :edit, :update, :destroy]
 
   # GET /books
-  # GET /books.json
   def index
     @books = Book.all.page(params[:page])
   end
 
   # GET /books/1
-  # GET /books/1.json
   def show
   end
 
@@ -22,37 +20,32 @@ class BooksController < ApplicationController
   end
 
   # POST /books
-  # POST /books.json
   def create
     @book = Book.new(book_params)
 
     respond_to do |format|
       if @book.save
         format.html { redirect_to @book, notice: 'Book was successfully created.' }
-        format.json { render :show, status: :created, location: @book }
       else
         format.html { render :new }
-        format.json { render json: @book.errors, status: :unprocessable_entity }
       end
     end
   end
 
   # PATCH/PUT /books/1
-  # PATCH/PUT /books/1.json
   def update
+    HistoryCard.history_saver(current_user.id, @book.id, @book.title, current_user.id) if book_params[:reader]
     respond_to do |format|
       if @book.update(book_params)
-        format.html { redirect_to @book, notice: 'Book was successfully updated.' }
-        format.json { render :show, status: :ok, location: @book }
+        format.html { redirect_to @book, notice: 'You took this book!' } if book_params[:reader]
+        format.html { redirect_to @book, notice: 'Book was successfully updated.' } unless book_params[:reader]
       else
         format.html { render :edit }
-        format.json { render json: @book.errors, status: :unprocessable_entity }
       end
     end
   end
 
   # DELETE /books/1
-  # DELETE /books/1.json
   def destroy
     @book.destroy
     respond_to do |format|

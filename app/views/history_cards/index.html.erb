@@ -1,0 +1,38 @@
+<div class="row">
+
+  <div class="col-md-2 text-center"><br><%= link_to 'Back', books_path %></div>
+  <div class="col-md-8">
+    <br>
+    <h2 class="text-center"> History of your borrows:</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Book id</th>
+          <th scope="col">Title</th>
+          <th scope="col">Date</th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+    <% @history_cards.each do |card| %>
+      <tbody>
+        <tr>
+          <td><%= card.book_id %></td>
+          <td>"<%= card.book_title %>"</td>
+          <td><%= card.created_at.strftime("%F") %></td>
+          <td>
+            <% if card.book_reader != nil %>
+              <%= form_with(model: card, local: true) do |form| %>
+                <%= form.hidden_field :book_reader, id: :card_book_reader, value: nil %>
+                <%= form.submit 'Return book', method: :put, class:"btn btn-warning btn-sm"%>
+              <% end %>
+            <% else %>
+            <p>Returned</p>
+            <% end %>
+          </td>
+        </tr>
+        </tbody>
+    <% end %>
+    </table>
+  </div>
+  <div class="col-md-2"></div>
+</div>

@@ -3,10 +3,8 @@
   <div class="col-md-6">
     <br>
     <% if current_user %>
-
-    <%= link_to_prev_page @books, 'Previous Page' %>
-    <%= link_to_next_page @books, 'Next Page' %>
-
+    <%= link_to_prev_page @books, 'Prev' %>&ensp;
+    <%= link_to_next_page @books, 'Next' %>
     <% end %>
     <% unless current_user %>
     <br>
@@ -16,24 +14,29 @@
     <% if notice %>
     <p id="notice" class="alert alert-success"><%= notice %></p>
     <%end%>
-
     <% if current_user %>
     <h2>Books list:</h2>
     <table>
-
       <tbody>
         <% @books.each do |book| %>
           <tr>
             <td>
-              <p><%= book.title %></p>
+              <p>"<%= book.title %>"</p>
               <%= image_tag(book.file.thumb.url, alt: 'Image', class:"img-responsive") if book.file? %>
               <p>
                 <br>
                 <%= link_to 'Show', book , class:"btn btn-primary btn-sm"%>
-                <% if current_user.role == 'admin' %>
                 <%= link_to 'Edit', edit_book_path(book), class:"btn btn-success btn-sm" %>
                 <%= link_to 'Destroy', book, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger btn-sm" %>
-                <%= link_to 'Take book',edit_book_path(book), class:"btn btn-warning btn-sm"%>
+                <% if book.reader == nil %>
+                  <%= form_with(model: book, local: true) do |form| %>
+                    <%= form.hidden_field :reader, id: :book_reader, value: current_user.id %>
+                    <%= form.submit 'Take this book', method: :put, class:"btn btn-warning btn-sm"%>
+                  <% end %>
+                <% else %>
+                  <p class="text-info">
+                    This book have been taken by some one smart! Please try later!
+                  </p>
                 <% end %>
               </p>
             </td>
@@ -42,13 +45,20 @@
       </tbody>
     </table>
     <br>
-    <%= link_to 'Add new Book', new_book_path %>
+    <%= link_to 'Add new Book', new_book_path, class:"btn-default btn-sm" %>
     <% end %>
-
+    <br>
+    <br>
+    <% if current_user %>
+    <%= link_to_prev_page @books, 'Prev' %>&ensp;
+    <%= link_to_next_page @books, 'Next' %>
+    <% end %>
   </div>
   <div class="col-md-3">
     <br>
-    <%= link_to 'Your History', new_book_path, class:"btn btn-info btn-sm" %>
+    <% if current_user %>
+    <%= link_to 'Your History', history_cards_path, class:"btn btn-info btn-sm" %>
+    <% end %>
   </div>
 </div>
 <br>

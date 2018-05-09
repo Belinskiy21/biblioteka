@@ -22,7 +22,7 @@
           <tr>
             <td>
               <p>"<%= book.title %>"</p>
-              <%= image_tag(book.file.thumb.url, alt: 'Image', class:"img-responsive") if book.file? %>
+              <%= cl_image_tag(book.file.thumb.url, alt: 'Image', class:"img-responsive") if book.file? %>
               <p>
                 <br>
                 <%= link_to 'Show', book , class:"btn btn-primary btn-sm"%>

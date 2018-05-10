@@ -25,6 +25,6 @@ before_action :set_history_card, only: [:update]
   end
 
   def history_card_params
-    params.require(:history_card).permit(:book_reader,:book_id)
+    params.require(:history_card).permit(:book_reader, :book_title)
   end
 end

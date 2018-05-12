@@ -1,7 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe BooksController, type: :controller do
-   let(:book) { FactoryBot.create(:book) }
+  let(:book) { FactoryBot.create(:book) }
+  let(:params) { { title: 'Some title', description: 'Some description', published_at: '2015', author: 'Oleg Belinskyi' } }
+
 
   describe "GET #index" do
     before { get :index }
@@ -42,6 +44,27 @@ RSpec.describe BooksController, type: :controller do
     it 'render edit template and return success response' do
       expect(response).to be_success
       expect(response).to render_template :edit
+    end
+  end
+
+  describe 'POST #create' do
+    it 'create book' do
+      expect(response).to be_success
+      expect{ Book.create(params) }.to change{ Book.all.size }.by(1)
+    end
+  end
+
+  describe "PATCH #update" do
+    it "should update the book" do
+      Book.update(params)
+      expect(response).to be_success
+    end
+  end
+
+  describe "DELETE destroy" do
+    it "should delete the book" do
+      Book.destroy(book.id)
+      expect(response).to be_success
     end
   end
 end

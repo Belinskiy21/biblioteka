@@ -1,6 +1,7 @@
 class Book < ApplicationRecord
   mount_uploader :file, ImageUploader
   has_many :history_cards
+  has_many :users, through: :history_cards
 
   validates :title, :author, :published_at, :description, presence: true
 

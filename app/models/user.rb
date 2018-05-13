@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   has_many :history_cards
+  has_many :books, through: :history_cards
 
   validates :name, presence: true
 
